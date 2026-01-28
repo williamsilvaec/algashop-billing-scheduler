@@ -3,22 +3,23 @@ package com.williamsilva.algashop.billingscheduler.infrastructure;
 import com.williamsilva.algashop.billingscheduler.application.CancelExpiredInvoicesApplicationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CancelExpiredInvoicesScheduler {
+public class CancelExpiredInvoicesRunner implements ApplicationRunner {
 
-    private static final Logger log = LoggerFactory.getLogger(CancelExpiredInvoicesScheduler.class);
+    private static final Logger log = LoggerFactory.getLogger(CancelExpiredInvoicesRunner.class);
 
     private final CancelExpiredInvoicesApplicationService applicationService;
 
-    public CancelExpiredInvoicesScheduler(CancelExpiredInvoicesApplicationService applicationService) {
+    public CancelExpiredInvoicesRunner(CancelExpiredInvoicesApplicationService applicationService) {
         this.applicationService = applicationService;
     }
 
-    @Scheduled(fixedRate = 5000) // a cada 5 segundos
-    public void runTask() {
+    @Override
+    public void run(ApplicationArguments args) {
         log.info("Task started - Canceling expired invoices.");
         applicationService.cancelExpiredInvoices();
         log.info("Task ended - Expired invoices.");
